@@ -58,9 +58,7 @@ function distance(distance, id, location, onlyFriends = false,onlyMine = false){
       return localMessages.filter(message => friends.some(friend => message.users_id === friend.friends_id))
     })
   } else {
-    // let distance = 10000000000000000000 //temp override
     let msg
-    console.log('!!!!!!',location,'!!!!!!!!');
     return (
       db.raw(`SELECT messages.* , st_astext(messages.location) AS location
           FROM messages
@@ -80,8 +78,8 @@ function distance(distance, id, location, onlyFriends = false,onlyMine = false){
         return message
       })
       // console.log(msg);
-      console.log(msg);
-      return msg
+      console.log(msg.filter((message,index,array)=>index > array.length - 11));
+      return msg.filter((message,index,array)=>index > array.length - 11)
     })
   }
 }
