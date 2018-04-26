@@ -12,10 +12,12 @@ const currentLocation = '47.595025, -122.331759' // century link field
 
 
 function create(message,location,id){
-    location = location.split(', ').join(' ')
+    console.log('location!!!!', location);
+    location = location.split(', ')[1] +' '+ location.split(', ')[0]
+    console.log('location!!!!', location);
     return (
       db('messages')
-      .insert({ users_id: id, message, location: st.geography(st.geomFromText(`Point(${location})`, 4326)) })
+      .insert({ users_id: id, message, location: st.geography(st.geomFromText(`Point(${location})`, 4326))})
       .returning('*')
     )
 }
@@ -48,9 +50,10 @@ function distance(distance, id, onlyFriends = false,onlyMine = false){
       return localMessages.filter(message => friends.some(friend => message.users_id === friend.friends_id))
     })
   } else {
+    let distance = 10000000000000000000 //temp override
     let msg
     return (
-      db.raw(`SELECT messages.* , geometry(messages.location) AS location
+      db.raw(`SELECT messages.* , st_astext(messages.location) AS location
           FROM messages
           where ST_DWithin(messages.location, ST_MakePoint(${currentLocation})::geography, ${distance})`)
     )
@@ -64,6 +67,7 @@ function distance(distance, id, onlyFriends = false,onlyMine = false){
         return message
       })
       // console.log(msg);
+      console.log(msg);
       return msg
     })
   }

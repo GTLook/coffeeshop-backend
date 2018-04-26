@@ -11,6 +11,7 @@ function create(req, res, next){
   if(!req.body.location){
     return next({ status: 400, message: 'Location can not be blank'})
   }
+  console.log('created at location:', req.body.location);
   messageModel.create(req.body.message, req.body.location, req.claim.id)
   .then(function(data){
     return res.status(201).send({ data })
