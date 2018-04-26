@@ -78,11 +78,29 @@ function distance(distance, id, onlyFriends = false,onlyMine = false){
       return messages.rows.filter(message => message.users_id == id)
     })
   } else {
+    let msg
     return (
       db.raw(`SELECT *
           FROM messages
           where ST_DWithin(messages.location, ST_MakePoint(${currentLocation})::geography, ${distance})`)
     )
+    .then(messages => {
+      // localMessages = messages.rows
+      // console.log(localMessages);
+      msg = messages.rows
+      return db('users').select('id', 'username')
+    })
+    .then(users => {
+      console.log(users);
+      // console.log(users[0].id, msg[0]);
+
+      const msgWithUsername = msg.map(message => {
+        message.username = users.find(user => user.id == message.users_id).username
+        return message
+      })
+      console.log(msgWithUsername);
+      return msg
+    })
   }
 }
 
