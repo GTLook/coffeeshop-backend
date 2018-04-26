@@ -3,13 +3,16 @@ const st = require('knex-postgis')(db)
 console.log(st);
 const bcrypt = require('bcrypt-as-promised')
 const userModel = require('./users')
-const location = '47.633199 -122.317607'
-const currentLocation = '47.598886, -122.333791' // galvanize
+// const location = '47.633199 -122.317607'
+// const currentLocation = '47.598886, -122.333791' // galvanize
+// const currentLocation = '47.627161, -122.334172' // slu
+const currentLocation = '47.595025, -122.331759' // century link field
 // const currentLocation = '0, 0'
 
 
 
-function create(message,id){
+function create(message,location,id){
+    location = location.split(', ').join(' ')
     return (
       db('messages')
       .insert({ users_id: id, message, location: st.geography(st.geomFromText(`Point(${location})`, 4326)) })

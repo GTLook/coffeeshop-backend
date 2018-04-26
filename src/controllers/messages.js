@@ -8,7 +8,10 @@ function create(req, res, next){
   if(!req.body.message){
     return next({ status: 400, message: 'Message can not be blank'})
   }
-  messageModel.create(req.body.message, req.claim.id)
+  if(!req.body.location){
+    return next({ status: 400, message: 'Location can not be blank'})
+  }
+  messageModel.create(req.body.message, req.body.location, req.claim.id)
   .then(function(data){
     return res.status(201).send({ data })
   })
