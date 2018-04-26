@@ -19,31 +19,6 @@ function create(message,location,id){
       .returning('*')
     )
 }
-//
-// function distance(distance){
-//   console.log(distance);
-//   let friends = db('users_users').where('users_id', 1)
-//   return friends
-//   .then(()=> return (
-//     db.raw(`SELECT *
-//         FROM messages
-//         where ST_DWithin(messages.location, ST_MakePoint(${currentLocation})::geography, ${distance})`)
-//   ))
-//   .then(messages=>messages.filter(message.))
-// }
-//
-//
-// function distance(distance){
-//   console.log(distance);
-//   return (
-//     // db('messages')
-//     // // .where({location})
-//     // .returning('*')
-//     db.raw(`SELECT *
-//         FROM messages
-//         where ST_DWithin(messages.location, ST_MakePoint(${currentLocation})::geography, ${distance})`)
-//   )
-// }
 
 
 
@@ -59,23 +34,18 @@ function distance(distance, id, onlyFriends = false,onlyMine = false){
     )
     .then(messages => {
       localMessages = messages.rows
-      // console.log(localMessages.filter(message => message.id == 1));
+      return db('users').select('id', 'username')
+    })
+    .then(users => {
+      localMessages.map(message => {
+        message.username = users.find(user => user.id == message.users_id).username
+        return message
+      })
       return db('users_users').where('users_id', id)
     })
     .then(friends => {
       myFriends = friends
       return localMessages.filter(message => friends.some(friend => message.users_id === friend.friends_id))
-    })
-  } else if (onlyMine) {
-    let localMessages
-    let myFriends
-    return (
-      db.raw(`SELECT *
-          FROM messages
-          where ST_DWithin(messages.location, ST_MakePoint(${currentLocation})::geography, ${distance})`)
-    )
-    .then(messages => {
-      return messages.rows.filter(message => message.users_id == id)
     })
   } else {
     let msg
@@ -85,20 +55,15 @@ function distance(distance, id, onlyFriends = false,onlyMine = false){
           where ST_DWithin(messages.location, ST_MakePoint(${currentLocation})::geography, ${distance})`)
     )
     .then(messages => {
-      // localMessages = messages.rows
-      // console.log(localMessages);
       msg = messages.rows
       return db('users').select('id', 'username')
     })
     .then(users => {
-      console.log(users);
-      // console.log(users[0].id, msg[0]);
-
-      const msgWithUsername = msg.map(message => {
+      msg.map(message => {
         message.username = users.find(user => user.id == message.users_id).username
         return message
       })
-      console.log(msgWithUsername);
+      console.log(msg);
       return msg
     })
   }
