@@ -26,11 +26,12 @@ function create(message,location,id){
 
 
 function distance(distance, id, location, onlyFriends = false,onlyMine = false){
+  console.log('???',location,'???',currentLocation);
   if (onlyFriends) {
     let localMessages
     let myFriends
     return (
-      db.raw(`SELECT messages.* , geometry(messages.location)
+      db.raw(`SELECT messages.* , st_astext(messages.location) AS location
           FROM messages
           where ST_DWithin(messages.location, ST_MakePoint(${currentLocation})::geography, ${distance})`)
     )
@@ -41,6 +42,10 @@ function distance(distance, id, location, onlyFriends = false,onlyMine = false){
     .then(users => {
       localMessages.map(message => {
         message.username = users.find(user => user.id == message.users_id).username
+        message.created_at = message.created_at.toString()
+        message.location = message.location.split('')
+          .filter((letter,idx,arr)=> idx > 5 && idx < arr.length - 1).join('')
+          .split(' ').reverse().join(', ')
         return message
       })
       return db('users_users').where('users_id', id)

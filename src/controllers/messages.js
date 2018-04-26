@@ -22,6 +22,7 @@ function create(req, res, next){
 
 function distance(req, res, next){
   console.log(req.params)
+  console.log(req.query);
   if(!parseFloat(req.params.distance)){
     return next({ status: 400, message: 'Distance must be a number'})
   }
