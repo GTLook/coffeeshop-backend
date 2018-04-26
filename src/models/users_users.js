@@ -35,7 +35,17 @@ function remove(friends_id,users_id){
   )
 }
 
+
+function get(users_id){
+  return (
+    db('users_users')
+    .where({users_id})
+    .returning('*')
+  )
+}
+
 module.exports = {
   create,
-  remove
+  remove,
+  get
 }

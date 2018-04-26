@@ -9,6 +9,7 @@ const authController = require('../controllers/auth')
 
 router.post('/', authController.isAuthenticated, friendshipController.create)
 router.delete('/', authController.isAuthenticated, friendshipController.remove)
+router.get('/', authController.isAuthenticated, friendshipController.get)
 
 
 
