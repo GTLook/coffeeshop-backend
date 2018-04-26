@@ -6,7 +6,7 @@ const userModel = require('./users')
 // const location = '47.633199 -122.317607'
 // const currentLocation = '47.598886, -122.333791' // galvanize
 // const currentLocation = '47.627161, -122.334172' // slu
-const currentLocation = '-122.331759, 47.595025' // century link field
+// const currentLocation = '-122.331759, 47.595025' // century link field
 // const currentLocation = '0, 0'
 
 
@@ -26,14 +26,17 @@ function create(message,location,id){
 
 
 function distance(distance, id, location, onlyFriends = false,onlyMine = false){
-  console.log('???',location,'???',currentLocation);
+  // console.log('???',location,'???',currentLocation);
+  const parsedLocation = location.split(', ').reverse().join(', ')
+  // console.log('???',location,'???',currentLocation, parsedLocation);
+
   if (onlyFriends) {
     let localMessages
     let myFriends
     return (
       db.raw(`SELECT messages.* , st_astext(messages.location) AS location
           FROM messages
-          where ST_DWithin(messages.location, ST_MakePoint(${currentLocation})::geography, ${distance})`)
+          where ST_DWithin(messages.location, ST_MakePoint(${parsedLocation})::geography, ${distance})`)
     )
     .then(messages => {
       localMessages = messages.rows
@@ -61,7 +64,7 @@ function distance(distance, id, location, onlyFriends = false,onlyMine = false){
     return (
       db.raw(`SELECT messages.* , st_astext(messages.location) AS location
           FROM messages
-          where ST_DWithin(messages.location, ST_MakePoint(${currentLocation})::geography, ${distance})`)
+          where ST_DWithin(messages.location, ST_MakePoint(${parsedLocation})::geography, ${distance})`)
     )
     .then(messages => {
       msg = messages.rows
