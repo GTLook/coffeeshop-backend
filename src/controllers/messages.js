@@ -24,6 +24,8 @@ function distance(req, res, next){
   if(!parseFloat(req.params.distance)){
     return next({ status: 400, message: 'Distance must be a number'})
   }
+  console.log(req.query.location);
+
   messageModel.distance(parseFloat(req.params.distance),req.claim.id, req.query.onlyFriends)
   .then(function(data){
     return res.status(201).send({ data })

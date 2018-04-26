@@ -28,7 +28,7 @@ function distance(distance, id, onlyFriends = false,onlyMine = false){
     let localMessages
     let myFriends
     return (
-      db.raw(`SELECT *
+      db.raw(`SELECT messages.* , geometry(messages.location)
           FROM messages
           where ST_DWithin(messages.location, ST_MakePoint(${currentLocation})::geography, ${distance})`)
     )
@@ -50,7 +50,7 @@ function distance(distance, id, onlyFriends = false,onlyMine = false){
   } else {
     let msg
     return (
-      db.raw(`SELECT *
+      db.raw(`SELECT messages.* , geometry(messages.location) AS location
           FROM messages
           where ST_DWithin(messages.location, ST_MakePoint(${currentLocation})::geography, ${distance})`)
     )
@@ -63,7 +63,7 @@ function distance(distance, id, onlyFriends = false,onlyMine = false){
         message.username = users.find(user => user.id == message.users_id).username
         return message
       })
-      console.log(msg);
+      // console.log(msg);
       return msg
     })
   }
