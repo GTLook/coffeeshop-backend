@@ -58,8 +58,12 @@ const port = process.env.PORT || 3000;
 io.on('connection', function(socket){
   socket.on('chat message', function(msg){
     console.log(msg);
-    setTimeout(()=>io.emit('chat message response', msg),500);
-  });
+    setTimeout(()=>io.emit('chat message response', msg),0);
+  })
+  // socket.on('new message', function(msg){
+  //   console.log(msg);
+  //   setTimeout(()=>io.emit('new message response', msg),500);
+  // })
 });
 
 http.listen(port, function(){
