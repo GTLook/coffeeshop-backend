@@ -27,7 +27,7 @@ function distance(req, res, next){
   }
   console.log(req.query.location);
 
-  messageModel.distance(parseFloat(req.params.distance),req.claim.id, req.query.onlyFriends)
+  messageModel.distance(parseFloat(req.params.distance),req.claim.id, req.query.location, req.query.onlyFriends)
   .then(function(data){
     return res.status(201).send({ data })
   })
