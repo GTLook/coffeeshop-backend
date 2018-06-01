@@ -1,40 +1,52 @@
+//////////////////////////////////////////////////////////////////////////////
+// Initilize modules
+//////////////////////////////////////////////////////////////////////////////
+
+
 const express = require('express')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
-const authController = require('./controllers/auth')
+// const authController = require('./controllers/auth')
+const fs = require('fs')
+
+const path = require('path')
+const app = express()
 
 if (process.env.NODE_ENV !== 'production'){
   require('dotenv').load()
 }
 
-const app = express()
-
-
+app.disable('x-powered-by')
 app.use(cors())
 app.use(morgan('dev'))
 app.use(bodyParser.json())
 
+if(process.env.NODE_ENV === 'development') app.use(morgan('dev'))
+if(process.env.NODE_ENV !== 'production') require('dotenv').load()
 
-
-//  Routes
+//////////////////////////////////////////////////////////////////////////////
+// Routes
+//////////////////////////////////////////////////////////////////////////////
 
 app.use('/auth', require('./routes/auth'))
 app.use('/users', require('./routes/users'))
-app.use('/messages', require('./routes/messages'))
-app.use('/users_users', require('./routes/users_users'))
+// app.use('/messages', require('./routes/messages'))
+// app.use('/users_users', require('./routes/users_users'))
 
 
+//////////////////////////////////////////////////////////////////////////////
 // Default Route
+//////////////////////////////////////////////////////////////////////////////
 
-app.use(function(req, res, next){
-  next({status: 404, message: 'Route not found' })
-})
+app.use((req, res, next) => next({status: 404, message: 'Route not found' }))
 
 
+//////////////////////////////////////////////////////////////////////////////
 // Error Handling
+//////////////////////////////////////////////////////////////////////////////
 
-app.use(function(err, req, res, next){
+app.use((err, req, res, next) => {
   const errorMessage = {}
 
   if(process.env.NODE_ENV !== 'production' && err.stack)
@@ -47,9 +59,9 @@ app.use(function(err, req, res, next){
 })
 
 
-
-//  Sockets & Serve//
-
+//////////////////////////////////////////////////////////////////////////////
+// Sockets & Serve
+//////////////////////////////////////////////////////////////////////////////
 
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
@@ -64,8 +76,12 @@ io.on('connection', function(socket){
   //   console.log(msg);
   //   setTimeout(()=>io.emit('new message response', msg),500);
   // })
-});
+})
 
-http.listen(port, function(){
-  console.log('listening on *:' + port);
-});
+//////////////////////////////////////////////////////////////////////////////
+// Starting Server
+//////////////////////////////////////////////////////////////////////////////
+
+http.listen(port, () => {console.log(`Listening on port ${port}`)})
+
+module.exports = app
