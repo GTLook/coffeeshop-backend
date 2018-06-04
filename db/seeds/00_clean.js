@@ -1,10 +1,7 @@
 exports.seed = function(knex, Promise) {
 
-  return knex('users_users').del()
-  .then(function () {
-    return knex('messages').del()
-  })
-  .then(function () {
-    return knex('users').del()
-  })
-}
+  const tablesToClean = ['users','shops','products','product_option_size','product_option_milk','product_option_extra'].reverse()
+
+  return tablesToClean.reduce((acc, ele) => acc.then(() => knex(ele).del()), Promise.resolve())
+
+};

@@ -2,20 +2,14 @@
 // Initilize modules
 //////////////////////////////////////////////////////////////////////////////
 
-
 const express = require('express')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
-// const authController = require('./controllers/auth')
 const fs = require('fs')
 
 const path = require('path')
 const app = express()
-
-if (process.env.NODE_ENV !== 'production'){
-  require('dotenv').load()
-}
 
 app.disable('x-powered-by')
 app.use(cors())
