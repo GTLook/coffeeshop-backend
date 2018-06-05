@@ -25,8 +25,8 @@ if(process.env.NODE_ENV !== 'production') require('dotenv').load()
 
 app.use('/auth', require('./routes/auth'))
 app.use('/users', require('./routes/users'))
-// app.use('/messages', require('./routes/messages'))
-// app.use('/users_users', require('./routes/users_users'))
+app.use('/api/customer', require('./routes/customer'))
+app.use('/api/shop', require('./routes/shop'))
 
 
 //////////////////////////////////////////////////////////////////////////////

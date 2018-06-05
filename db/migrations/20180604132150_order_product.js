@@ -4,8 +4,7 @@ exports.up = function(knex, Promise) {
   return knex.schema.createTable(TABLE_NAME, function(table){
     table.increments()
     table.integer('order_id').notNullable().references('order.id')
-    table.integer('product_final_id').notNullable().references('product_with_options.id')
-    table.boolean('is_fulfilled').notNullable().defaultTo(false)
+    table.integer('product_with_options_id').notNullable().references('product_with_options.id')
     // table.string('pickup_time').notNullable().defaultTo('')
     //table.time('pickup_time').notNullable()
     table.timestamps(true,true)
