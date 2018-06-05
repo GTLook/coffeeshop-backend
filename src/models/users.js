@@ -5,10 +5,10 @@ const bcrypt = require('bcrypt-as-promised')
 // Basic CRUD Methods
 //////////////////////////////////////////////////////////////////////////////
 
-function getOneByUserName(username){
+function getOneByEmail(email){
   return (
     db('users')
-    .where({ username })
+    .where({ email })
     .first()
   )
 }
@@ -32,10 +32,9 @@ function getOneById(id){
 // 5. "return/continue" promise
 //////////////////////////////////////////////////////////////////////////////
 
-function create(username, password){
-
+function create({email, password, first_name, last_name, picture}){
   // check to see of user already exists
-  return getOneByUserName(username)
+  return getOneByEmail(email)
   .then(function(data){
     // if user already exists, return 400
     if(data) throw { status: 400, message:'User already exists'}
@@ -45,10 +44,12 @@ function create(username, password){
   })
   .then(function(hashedPassword){
 
+    picture = picture ? picture : 'http://www.placecage.com/50/50'
+
     // 3. Insert record into database
     return (
       db('users')
-      .insert({ username, password: hashedPassword })
+      .insert({ email, hashed_password: hashedPassword, first_name, last_name, picture})
       .returning('*')
     )
   })
@@ -61,7 +62,7 @@ function create(username, password){
 }
 
 module.exports = {
-  getOneByUserName,
+  getOneByEmail,
   getOneById,
-  create
+  create,
 }
