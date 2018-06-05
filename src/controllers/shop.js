@@ -50,4 +50,4 @@ const removeStoreOrder = (req, res, next) => {
   .catch(next)
 }
 
-module.exports = { authGetOne, getAllStoreOrders, modifyStoreOrders, removeStoreOrder }
+module.exports = { getAllStoreOrders, createStoreOrders, modifyStoreOrders, removeStoreOrder }

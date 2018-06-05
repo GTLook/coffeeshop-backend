@@ -71,4 +71,16 @@ const removeUserOrder = (req, res, next) => {
   .catch(next)
 }
 
-module.exports = { authGetOne, getAllShops, getAllProducts, getAllUserOrders, createUserOrders, modifyUserOrders, removeUserOrder }
+const getAllUserFavorites = (req, res, next) => {
+  dataModel.authGetOne(req.params.userId)
+  .then(review => {
+    if(!req.params.userId) return next({ status: 400, message: 'Error: Specify userId'})
+    if(req.claim.id !== review[0]['user_id']) return next({ status: 401, message: 'Unauthorized'})
+    dataModel.getAllUserOrders(req.params.userId)
+    .then((data) => res.status(200).json({ data }))
+    .catch(next)
+  })
+  .catch(next)
+}
+
+module.exports = { getAllShops, getAllProducts, getAllUserOrders, createUserOrders, modifyUserOrders, removeUserOrder, getAllUserFavorites }
