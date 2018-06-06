@@ -15,8 +15,7 @@ const getAllShops = (req, res, next) => {
 //////////////////////////////////////////////////////////////////////////////
 
 const getAllProducts = (req, res, next) => {
-  if(!req.params.shopId) return next({ status: 400, message: 'Error: Specify ShopId for product list'})
-  dataModel.getAllProducts(req.params.shopId)
+  dataModel.getAllProducts()
   .then((data) => res.status(200).json({ data }))
   .catch(next)
 }

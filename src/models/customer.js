@@ -18,14 +18,26 @@ const authGetOne = (snackId, reviewId) => {
 
 const getAllShops = () => {
   return (
-    db('reviews')
+    db('shops')
   )
 }
 
 const getAllProducts = () => {
-  return (
-    db('reviews')
-  )
+  const shopsProducts = []
+  return getAllShops()
+  .then(shops => {
+    shops.map(shop => shopsProducts.push({shop, orderItems: []}))
+    return (
+      db('products')
+    )
+  })
+  .then(products => {
+    products.map(product => shopsProducts
+      .find(el => el.shop.id === product.shop_id)
+      .orderItems.push(product))
+    return shopsProducts
+  })
+
 }
 
 const getAllUserOrders = () => {
