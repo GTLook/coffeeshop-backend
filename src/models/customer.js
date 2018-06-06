@@ -6,10 +6,10 @@ const shortid = require('shortid')
 // Auth check for user
 //////////////////////////////////////////////////////////////////////////////
 
-const authGetOne = (snackId, reviewId) => {
+const authGetOne = (userId) => {
   return (
-    db('reviews')
-    .where({ snack_id: snackId, id: reviewId })
+    db('users')
+    .where({ id: userId })
     .returning('*')
   )
 }
@@ -125,23 +125,23 @@ const createUserOrders = (userId, payload) => {
 }
 
 
-const modifyUserOrders = (snackId, reviewId, userId, {title, text, rating}) => {
+const modifyUserOrders = (userId, orderId, shopId, {is_fulfilled, is_canceled}) => {
   return (
-    db('reviews')
-    .where({ id: reviewId })
-    .update({title, text, rating, snack_id: snackId, user_id: userId})
+    db('order_ledger')
+    .where({ order_user_id: userId })
+    .update({ is_fulfilled: is_fulfilled, is_canceled: is_canceled})
     .returning('*')
   )
 }
 
 const removeUserOrder = (reviewId) => {
-  return (
-    db('reviews')
-    .where({ id: reviewId })
-    .first()
-    .del()
-    .returning('*')
-  )
+  // return (
+  //   db('reviews')
+  //   .where({ id: reviewId })
+  //   .first()
+  //   .del()
+  //   .returning('*')
+  // )
 }
 
 

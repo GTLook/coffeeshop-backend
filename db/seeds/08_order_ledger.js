@@ -1,5 +1,3 @@
-const moment = require('moment')
-
 const TABLE_NAME = 'order_ledger'
 
 exports.seed = function(knex, Promise) {
