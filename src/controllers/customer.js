@@ -36,27 +36,17 @@ const getAllOptions = (req, res, next) => {
 //////////////////////////////////////////////////////////////////////////////
 
 const getAllUserOrders = (req, res, next) => {
-  dataModel.authGetOne(req.params.userId)
-  .then(review => {
-    if(!req.params.userId) return next({ status: 400, message: 'Error: Specify userId'})
-    if(req.claim.id !== review[0]['user_id']) return next({ status: 401, message: 'Unauthorized'})
-    dataModel.getAllUserOrders(req.params.userId)
+    if(!req.claim.id) return next({ status: 401, message: 'Unauthorized'})
+    dataModel.getAllUserOrders(req.claim.id)
     .then((data) => res.status(200).json({ data }))
     .catch(next)
-  })
-  .catch(next)
 }
 
 const createUserOrders = (req, res, next) => {
-  dataModel.authGetOne(req.params.userId)
-  .then(review => {
-    if(!req.params.userId) return next({ status: 400, message: 'Error: Specify userId'})
-    if(req.claim.id !== review[0]['user_id']) return next({ status: 401, message: 'Unauthorized'})
-    dataModel.createUserOrders(req.params.userId, req.claim.id, req.body)
-      .then((data) => res.status(200).json({ data }))
-      .catch(next)
-      })
-    .catch(next)
+  if(!req.claim.id) return next({ status: 401, message: 'Unauthorized'})
+  dataModel.createUserOrders(req.claim.id, req.body)
+  .then((data) => res.status(200).json({ data }))
+  .catch(next)
 }
 
 const modifyUserOrders = (req, res, next) => {

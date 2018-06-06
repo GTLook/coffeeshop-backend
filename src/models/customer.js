@@ -1,4 +1,6 @@
 const db = require('../../db/knex')
+const shortid = require('shortid')
+
 
 //////////////////////////////////////////////////////////////////////////////
 // Auth check for user
@@ -68,27 +70,44 @@ const getAllOptions = () => {
 
 
 
-
-
-
-
-
-
-
-
-const getAllUserOrders = () => {
+const getAllUserOrders = (userId) => {
   return (
-    db('reviews')
+    db('order_ledger')
+    .where({ order_user_id: userId })
   )
 }
 
-const createUserOrders = (snackId, userId, {title, text, rating}) => {
+const createUserOrders = (userId, payload) => {
+  const order_shortid = shortid.generate()
+  const order_user_id = userId
+  const order_shop_id = 1
+  const is_fulfilled = false
+  const is_canceled = false
+  const pickup_time = '2018-05-05 06:00:00'
+  const product_with_options_id = 1
+  const product_option_size = 1
+  const product_option_milk = 1
+  const product_option_extra = 1
+  const extra_espresso_shots = 0
+  const items = [1,2,3,4]
+
   return (
-    db('reviews')
-    .insert({title, text, rating, snack_id: snackId, user_id: userId})
+    db('order_ledger')
+    .insert({order_shortid, order_user_id, order_shop_id, is_fulfilled,is_canceled,pickup_time})
     .returning('*')
   )
+  .then(order => {
+    return  (
+      db('order_product')
+      .insert(items.map(el=>({order_id: order[0].id, product_with_options_id, product_option_size, product_option_milk, product_option_extra, extra_espresso_shots})))
+      .returning('*')
+    )
+  })
 }
+
+
+
+
 
 const modifyUserOrders = (snackId, reviewId, userId, {title, text, rating}) => {
   return (
