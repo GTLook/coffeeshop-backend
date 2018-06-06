@@ -9,7 +9,9 @@ const authController = require('../controllers/auth')
 //////////////////////////////////////////////////////////////////////////////
 
 router.get('/shops/', dataController.getAllShops)
-router.get('/products/:shopId', dataController.getAllProducts)
+router.get('/products/', dataController.getAllProducts)
+router.get('/options/', dataController.getAllOptions)
+
 router.get('/userFavorites/:userId', authController.isAuthenticated, dataController.getAllUserFavorites)
 
 router.get('/userOrders/:userId', authController.isAuthenticated, dataController.getAllUserOrders)
