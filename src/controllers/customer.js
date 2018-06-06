@@ -11,11 +11,22 @@ const getAllShops = (req, res, next) => {
 }
 
 //////////////////////////////////////////////////////////////////////////////
-// Get Shop products by shop Id
+// Get All Shops & Products
 //////////////////////////////////////////////////////////////////////////////
 
 const getAllProducts = (req, res, next) => {
   dataModel.getAllProducts()
+  .then((data) => res.status(200).json({ data }))
+  .catch(next)
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+// Get All Options
+//////////////////////////////////////////////////////////////////////////////
+
+const getAllOptions = (req, res, next) => {
+  dataModel.getAllOptions()
   .then((data) => res.status(200).json({ data }))
   .catch(next)
 }
@@ -82,4 +93,4 @@ const getAllUserFavorites = (req, res, next) => {
   .catch(next)
 }
 
-module.exports = { getAllShops, getAllProducts, getAllUserOrders, createUserOrders, modifyUserOrders, removeUserOrder, getAllUserFavorites }
+module.exports = { getAllShops, getAllProducts, getAllUserOrders, createUserOrders, modifyUserOrders, removeUserOrder, getAllUserFavorites, getAllOptions }

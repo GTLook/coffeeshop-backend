@@ -7,7 +7,9 @@ exports.up = function(knex, Promise) {
     table.integer('drink_size').notNullable().references('product_option_size.id')
     table.integer('milk_type').references('product_option_milk.id')
     table.integer('extra_options').references('product_option_extra.id')
+    table.integer('espresso_shots').defaultTo(0)
     table.integer('extra_espresso_shots').defaultTo(0)
+    table.decimal('extra_espresso_shots_price').notNullable().defaultTo(0)
     table.timestamps(true,true)
   })
 }

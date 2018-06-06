@@ -17,13 +17,3 @@ exports.seed = function(knex, Promise) {
     //   return knex.raw(`SELECT setval('${TABLE_NAME}_id_seq', (SELECT MAX(id) FROM ${TABLE_NAME}));`)
     // })
   }
-  //
-  // table.increments()
-  // table.string('order_shortid').notNullable()
-  // table.integer('order_user_id').notNullable().references('users.id')
-  // table.integer('order_shop_id').notNullable().references('shops.id')
-  // table.boolean('is_fulfilled').notNullable().defaultTo(false)
-  // table.boolean('is_canceled').notNullable().defaultTo(false)
-  // //table.string('pickup_time').notNullable().defaultTo('')
-  // //table.timestamp('pickup_time').notNullable()
-  // table.timestamps(true,true)

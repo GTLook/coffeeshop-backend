@@ -29,6 +29,9 @@ const getAllProducts = () => {
     shops.map(shop => shopsProducts.push({shop, orderItems: []}))
     return (
       db('products')
+      .leftJoin('product_with_options', 'product_with_options.product_id', 'products.id')
+      .leftJoin('product_option_size', 'product_option_size.id', 'product_with_options.drink_size')
+      .leftJoin('product_option_milk', 'product_option_milk.id', 'product_with_options.milk_type')
     )
   })
   .then(products => {
@@ -37,8 +40,41 @@ const getAllProducts = () => {
       .orderItems.push(product))
     return shopsProducts
   })
-
 }
+
+
+const getAllOptions = () => {
+  let options = {}
+  return  (
+    db('product_option_size')
+  )
+  .then(size => {
+    options = {...options, size}
+    return  (
+      db('product_option_milk')
+    )
+  })
+  .then(milk => {
+    options = {...options, milk}
+    return  (
+      db('product_option_extra')
+    )
+  })
+  .then(extra => {
+    options = {...options, extra}
+    return options
+  })
+}
+
+
+
+
+
+
+
+
+
+
 
 const getAllUserOrders = () => {
   return (
@@ -74,4 +110,4 @@ const removeUserOrder = (reviewId) => {
 }
 
 
-module.exports = { authGetOne, getAllShops, getAllProducts, getAllUserOrders, createUserOrders, modifyUserOrders, removeUserOrder }
+module.exports = { authGetOne, getAllShops, getAllProducts, getAllUserOrders, createUserOrders, modifyUserOrders, removeUserOrder, getAllOptions }
