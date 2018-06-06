@@ -1,6 +1,6 @@
-# Snacks (Backend)
+# CoffeeShop (Backend)
 
-Snacks is a snack rating and review web application.  It allows user to create a profile, log in, and leave a review and rating for the seeded snacks.
+CoffeeShop is a coffee ordering web application.  It allows users to create a profile, log in, and order custom coffee drinks at the nearest coffee shops  Users can set the time they want to pick up their drinks for a delay up to 30 minutes.
 
 ## Getting Started
 
@@ -34,15 +34,18 @@ npm run knex migrate:latest
 npm run knex seed:run
 ```
 
-Finally, start the server and check that you can GET the `/api/snacks` endpoint
+Finally, start the server:
 
 ```shell
 npm run dev
 ```
 
+Check that you can GET the `/api/snacks` endpoint.  If you receive a 200 from the server your up and running.
+
+
 ## Deployment
 
-This project has been deployed on Heroku at the adsress:
+This project has been deployed on Heroku at the address:
 
 ## Built With
 

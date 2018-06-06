@@ -43,28 +43,24 @@ const getAllUserOrders = (req, res, next) => {
 }
 
 const createUserOrders = (req, res, next) => {
-  if(!req.claim.id) return next({ status: 401, message: 'Unauthorized'})
-  if(!req.body.payload) return next({ status: 400, message: 'Missing payload'})
-  const payload = JSON.parse(req.body.payload)
-  dataModel.createUserOrders(req.claim.id, payload)
+  dataModel.authGetOne(req.params.userId)
+  .then(review => {
+    if(!req.claim.id) return next({ status: 401, message: 'Unauthorized'})
+    if(!req.body.payload) return next({ status: 400, message: 'Missing payload'})
+    const payload = JSON.parse(req.body.payload)
+    return dataModel.createUserOrders(req.claim.id, payload)
+  })  
   .then((data) => res.status(200).json({ data }))
   .catch(next)
 }
-
-
-
-
-
-
 
 const modifyUserOrders = (req, res, next) => {
   dataModel.authGetOne(req.params.userId)
   .then(review => {
     if(req.claim.id !== review[0]['user_id']) return next({ status: 401, message: 'Unauthorized'})
-    dataModel.modifyUserOrders(req.params.userId, req.params.orderId, req.claim.id, req.body)
-    .then((data) => res.status(200).json({ data }))
-    .catch(next)
+    return dataModel.modifyUserOrders(req.params.userId, req.params.orderId, req.claim.id, req.body)
   })
+  .then((data) => res.status(200).json({ data }))
   .catch(next)
 }
 
@@ -72,22 +68,20 @@ const removeUserOrder = (req, res, next) => {
   dataModel.authGetOne(req.params.userId, req.params.reviewId)
   .then(review => {
     if(req.claim.id !== review[0]['user_id']) return next({ status: 401, message:  'Unauthorized'})
-    dataModel.removeUserOrder(req.params.orderId)
-    .then((data) => res.status(200).json({ data }))
-    .catch(next)
+    return dataModel.removeUserOrder(req.params.orderId)
   })
+  .then((data) => res.status(200).json({ data }))
   .catch(next)
 }
 
 const getAllUserFavorites = (req, res, next) => {
   dataModel.authGetOne(req.params.userId)
   .then(review => {
-    if(!req.params.userId) return next({ status: 400, message: 'Error: Specify userId'})
     if(req.claim.id !== review[0]['user_id']) return next({ status: 401, message: 'Unauthorized'})
-    dataModel.getAllUserOrders(req.params.userId)
-    .then((data) => res.status(200).json({ data }))
-    .catch(next)
+    if(!req.params.userId) return next({ status: 400, message: 'Error: Specify userId'})
+    return dataModel.getAllUserOrders(req.params.userId)
   })
+  .then((data) => res.status(200).json({ data }))
   .catch(next)
 }
 

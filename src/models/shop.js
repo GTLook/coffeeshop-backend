@@ -4,10 +4,10 @@ const db = require('../../db/knex')
 // Auth check for user
 //////////////////////////////////////////////////////////////////////////////
 
-const authGetOne = (snackId, reviewId) => {
+const authGetOne = (userId) => {
   return (
-    db('reviews')
-    .where({ snack_id: snackId, id: reviewId })
+    db('users')
+    .where({ id: userId })
     .returning('*')
   )
 }
@@ -16,29 +16,44 @@ const authGetOne = (snackId, reviewId) => {
 // Basic CRUD Methods
 //////////////////////////////////////////////////////////////////////////////
 
-const getAllStoreOrders = () => {
+const getAllStoreOrders = (shopId) => {
+  let detailedOrders = []
   return (
-    db('reviews')
+    db('order_ledger')
+    .where({ order_shop_id: shopId })
   )
+  .then(orders => {
+    detailedOrders = orders.map(order=>({...order, orderItems:[]}))
+    return (
+      db('order_product')
+    )
+  })
+  .then(items => {
+    items.map(item => {
+      const order = detailedOrders.find(order => order.id === item.order_id)
+      order ? order.orderItems.push(item) : null
+    })
+    return detailedOrders
+  })
 }
 
-const modifyStoreOrders = (snackId, reviewId, userId, {title, text, rating}) => {
+const modifyStoreOrders = (shopId, orderId, userId, {is_fulfilled, is_canceled}) => {
   return (
-    db('reviews')
-    .where({ id: reviewId })
-    .update({title, text, rating, snack_id: snackId, user_id: userId})
+    db('order_ledger')
+    .where({ order_shop_id: shopId })
+    .update({ is_fulfilled: is_fulfilled, is_canceled: is_canceled})
     .returning('*')
   )
 }
 
 const removeStoreOrder = (reviewId) => {
-  return (
-    db('reviews')
-    .where({ id: reviewId })
-    .first()
-    .del()
-    .returning('*')
-  )
+  // return (
+  //   // db('reviews')
+  //   // .where({ id: reviewId })
+  //   // .first()
+  //   // .del()
+  //   // .returning('*')
+  // )
 }
 
 module.exports = { authGetOne, getAllStoreOrders, modifyStoreOrders, removeStoreOrder }
