@@ -71,25 +71,37 @@ const getAllOptions = () => {
 
 
 const getAllUserOrders = (userId) => {
+  let detailedOrders = []
   return (
     db('order_ledger')
     .where({ order_user_id: userId })
   )
+  .then(orders => {
+    detailedOrders = orders.map(order=>({...order, orderItems:[]}))
+    return (
+      db('order_product')
+    )
+  })
+  .then(items => {
+    items.map(item => {
+      const order = detailedOrders.find(order => order.id === item.order_id)
+      order ? order.orderItems.push(item) : null
+    })
+    return detailedOrders
+  })
 }
+
+// '{"shopId":"1","pickupTime":"2018-05-05 06:00:00","orderItems":[{"productWithOptionsId":"2","sizeId":"3","milkId":"2","extraId":"1","extraShots":2},{"productWithOptionsId":"1","sizeId":"1","milkId":"1","extraId":"1","extraShots":0}]}'
+
 
 const createUserOrders = (userId, payload) => {
   const order_shortid = shortid.generate()
   const order_user_id = userId
-  const order_shop_id = 1
+  const order_shop_id = payload.shopId
   const is_fulfilled = false
   const is_canceled = false
-  const pickup_time = '2018-05-05 06:00:00'
-  const product_with_options_id = 1
-  const product_option_size = 1
-  const product_option_milk = 1
-  const product_option_extra = 1
-  const extra_espresso_shots = 0
-  const items = [1,2,3,4]
+  const pickup_time = payload.pickupTime
+  const items = payload.orderItems
 
   return (
     db('order_ledger')
@@ -99,14 +111,18 @@ const createUserOrders = (userId, payload) => {
   .then(order => {
     return  (
       db('order_product')
-      .insert(items.map(el=>({order_id: order[0].id, product_with_options_id, product_option_size, product_option_milk, product_option_extra, extra_espresso_shots})))
+      .insert(items.map(item=>({
+        order_id: order[0].id,
+        product_with_options_id: item.productWithOptionsId,
+        product_option_size: item.sizeId,
+        product_option_milk: item.milkId,
+        product_option_extra: item.extraId,
+        extra_espresso_shots: item.extraShots
+      })))
       .returning('*')
     )
   })
 }
-
-
-
 
 
 const modifyUserOrders = (snackId, reviewId, userId, {title, text, rating}) => {

@@ -44,10 +44,18 @@ const getAllUserOrders = (req, res, next) => {
 
 const createUserOrders = (req, res, next) => {
   if(!req.claim.id) return next({ status: 401, message: 'Unauthorized'})
-  dataModel.createUserOrders(req.claim.id, req.body)
+  if(!req.body.payload) return next({ status: 400, message: 'Missing payload'})
+  const payload = JSON.parse(req.body.payload)
+  dataModel.createUserOrders(req.claim.id, payload)
   .then((data) => res.status(200).json({ data }))
   .catch(next)
 }
+
+
+
+
+
+
 
 const modifyUserOrders = (req, res, next) => {
   dataModel.authGetOne(req.params.userId)
