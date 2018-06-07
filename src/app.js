@@ -60,16 +60,27 @@ app.use((err, req, res, next) => {
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const port = process.env.PORT || 3000
+let clients = []
+
 
 io.on('connection', function(socket){
+  clients.push({
+    socketId:socket.id,
+    token: socket.handshake.query.token
+  })
+  console.log(clients)
+  // console.log(socket.handshake.query.token)
   socket.on('chat message', function(msg){
     console.log(msg);
-    setTimeout(()=>io.emit('chat message response', msg),0);
+    const targetClient = clients.find(el => el.token === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTI4Mzg4MzMzfQ.dxZZ-rC-mon4U6QWNCsJ5yrJlQZMqW4dhshl-Pxn6o0')
+    console.log(targetClient)
+    io.sockets.connected[targetClient.socketId || null].emit('chat message response', msg)
   })
-  // socket.on('new message', function(msg){
-  //   console.log(msg);
-  //   setTimeout(()=>io.emit('new message response', msg),500);
-  // })
+
+  socket.on('disconnect', function() {
+      clients = clients.filter(client => client.socketId !== socket.id)
+      console.log('Got disconnect!');
+   });
 })
 
 //////////////////////////////////////////////////////////////////////////////
