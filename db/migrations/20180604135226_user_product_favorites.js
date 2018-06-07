@@ -5,7 +5,6 @@ exports.up = function(knex, Promise) {
     table.increments()
     table.integer('user_id').notNullable().references('users.id')
     table.integer('shop_id').notNullable().references('shops.id')
-    table.integer('product_with_options_id').notNullable().references('product_with_options.id')
     table.timestamps(true,true)
   })
 }
