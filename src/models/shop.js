@@ -16,16 +16,25 @@ const authGetOne = (userId) => {
 // Basic CRUD Methods
 //////////////////////////////////////////////////////////////////////////////
 
-const getAllStoreOrders = (shopId) => {
+const getAllStoreOrders = (ownerId) => {
   let detailedOrders = []
   return (
     db('order_ledger')
-    .where({ order_shop_id: shopId })
+    .innerJoin('shops', 'shops.id', 'order_ledger.order_shop_id')
+    .innerJoin('users', 'users.id', 'order_ledger.order_user_id')
+    .where({ owner_id: ownerId })
+    // .update({ hashed_password: '' })
+    .select(['*', 'order_ledger.id as id'])
   )
   .then(orders => {
     detailedOrders = orders.map(order=>({...order, orderItems:[]}))
     return (
       db('order_product')
+      .innerJoin('product_with_options', 'product_with_options.id', 'order_product.product_with_options_id')
+      .innerJoin('products', 'products.id', 'product_with_options.product_id')
+      .innerJoin('product_option_size', 'product_option_size.id', 'product_with_options.drink_size')
+      .innerJoin('product_option_milk', 'product_option_milk.id', 'product_with_options.milk_type')
+      .select(['*',  'order_product.id as id'])
     )
   })
   .then(items => {
