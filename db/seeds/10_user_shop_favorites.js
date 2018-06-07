@@ -1,4 +1,4 @@
-const TABLE_NAME = 'user_favorite_shops'
+const TABLE_NAME = 'user_shop_favorites'
 //const db = require('../')
 // const st = require('knex-postgis')(db)
 
@@ -8,8 +8,8 @@ exports.seed = function(knex, Promise) {
       return knex(TABLE_NAME).insert([
         {id: 1, user_id: 1, shop_id: 1},
         {id: 2, user_id: 2, shop_id: 2},
-        {id: 3, user_id: 1, shop_id: 3},
-        {id: 4, user_id: 2, shop_id: 4},
+        {id: 3, user_id: 1, shop_id: 1},
+        {id: 4, user_id: 2, shop_id: 2},
         {id: 5, user_id: 2, shop_id: 1},
         {id: 6, user_id: 1, shop_id: 2},
       ])
