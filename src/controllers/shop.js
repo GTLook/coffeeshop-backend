@@ -5,16 +5,16 @@ const dataModel = require('../models/shop')
 //////////////////////////////////////////////////////////////////////////////
 
 const getAllStoreOrders = (req, res, next) => {
-  dataModel.authGetOne(req.params.storeId)
-  .then(review => {
-    if(!req.params.storeId) return next({ status: 400, message: 'Error: Specify storeId'})
-    if(req.claim.id !== review[0]['store_id']) return next({ status: 401, message: 'Unauthorized'})
-    dataModel.getAllStoreOrders(req.params.userId)
-    .then((data) => res.status(200).json({ data }))
-    .catch(next)
-  })
+  console.log(req.claim.id)
+  dataModel.getAllStoreOrders(req.claim.id)
+  .then((data) => res.status(200).json({ data }))
   .catch(next)
 }
+
+
+
+
+
 
 const createStoreOrders = (req, res, next) => {
   dataModel.authGetOne(req.params.storeId)
@@ -28,14 +28,15 @@ const createStoreOrders = (req, res, next) => {
     .catch(next)
 }
 
+
+
 const modifyStoreOrders = (req, res, next) => {
-  dataModel.authGetOne(req.params.storeId)
-  .then(review => {
-    if(req.claim.id !== review[0]['user_id']) return next({ status: 401, message: 'Unauthorized'})
-    dataModel.modifyStoreOrders(req.params.storeId, req.params.orderId, req.claim.id, req.body)
-    .then((data) => res.status(200).json({ data }))
-    .catch(next)
-  })
+  console.log(req.claim.id)
+  // add verification here
+  if(!req.params.orderId) return next({ status: 400, message: 'Error: Specify order id'})
+  const {is_fulfilled, is_canceled} = req.body
+  dataModel.modifyStoreOrders(req.params.orderId, is_fulfilled, is_canceled)
+  .then((data) => res.status(200).json({ data }))
   .catch(next)
 }
 
