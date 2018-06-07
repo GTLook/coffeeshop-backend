@@ -46,10 +46,10 @@ const getAllStoreOrders = (ownerId) => {
   })
 }
 
-const modifyStoreOrders = (shopId, orderId, userId, {is_fulfilled, is_canceled}) => {
+const modifyStoreOrders = (orderId,is_fulfilled,is_canceled) => {
   return (
     db('order_ledger')
-    .where({ order_shop_id: shopId })
+    .where({ id: orderId })
     .update({ is_fulfilled: is_fulfilled, is_canceled: is_canceled})
     .returning('*')
   )
