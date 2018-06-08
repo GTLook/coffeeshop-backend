@@ -39,6 +39,7 @@ function login(email, password){
     // 4. strip hashed password away from object
     delete user.password
     // 5. "return/continue" promise
+    console.log('hiiiiiii')
     return user
   })
 }
