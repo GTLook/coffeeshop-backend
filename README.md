@@ -59,7 +59,8 @@ This project has been deployed on Heroku at the address: https://dashboard.herok
 * [postgreSQL](https://www.postgresql.org/) - database
 * [Axios](https://github.com/axios/axios) - Promise based HTTP client for the browser and node.js
 * [Node](https://nodejs.org/en/) - Package ecosystem
-* [sockets.io] (https://nodejs.org/en/) - Sockets system
+* [sockets](https://sockets.io) - Sockets system
+
 
 ## Contributing
 
