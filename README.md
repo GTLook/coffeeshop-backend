@@ -1,5 +1,10 @@
 # CoffeeShop (Backend)
 
+This is the backend of the project. 
+The front ends can be found at: 
+https://github.com/gEightyTwo/coffeeshop-frontend-customer
+https://github.com/gEightyTwo/coffeeshop-frontend-store
+
 CoffeeShop is a coffee ordering web application.  It allows users to create a profile, log in, and order custom coffee drinks.  The app utilizes the Google API location codes to find the nearest coffee shops and walking distance to the shop.  Users can craft their drink order and set the time they want to pick up their drinks for a delay up to 30 minutes.  Coffee shop owners can receive incoming orders, sorted by pickup time, and fulfill orders.
 
 ## Getting Started
@@ -43,7 +48,7 @@ Check that you can GET the `/api/customer/shops` endpoint.  If you receive a 200
 
 ## Deployment
 
-This project has been deployed on Heroku at the address:
+This project has been deployed on Heroku at the address: https://dashboard.heroku.com/apps/coffee-base
 
 ## Built With
 
