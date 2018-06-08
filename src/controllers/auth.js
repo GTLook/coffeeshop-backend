@@ -33,6 +33,7 @@ function login(req, res, next){
     const token = jwt.sign({id: user.id}, process.env.SECRET)
 
     // 4. Send back token
+    console.log(token);
     return res.status(200).send({ token })
   })
   .catch(next)
