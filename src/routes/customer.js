@@ -3,10 +3,7 @@ const router = express.Router()
 const dataController = require('../controllers/customer')
 const authController = require('../controllers/auth')
 
-
-//////////////////////////////////////////////////////////////////////////////
 // Basic CRUD Methods
-//////////////////////////////////////////////////////////////////////////////
 
 router.get('/shops/', dataController.getAllShops)
 router.get('/products/', dataController.getAllProducts)

@@ -1,8 +1,6 @@
 const db = require('../../db/knex')
 
-//////////////////////////////////////////////////////////////////////////////
 // Auth check for user
-//////////////////////////////////////////////////////////////////////////////
 
 const authGetOne = (userId) => {
   return (
@@ -12,9 +10,7 @@ const authGetOne = (userId) => {
   )
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // Basic CRUD Methods
-//////////////////////////////////////////////////////////////////////////////
 
 const getAllStoreOrders = (ownerId) => {
   let detailedOrders = []
@@ -23,7 +19,6 @@ const getAllStoreOrders = (ownerId) => {
     .innerJoin('shops', 'shops.id', 'order_ledger.order_shop_id')
     .innerJoin('users', 'users.id', 'order_ledger.order_user_id')
     .where({ owner_id: ownerId })
-    // .update({ hashed_password: '' })
     .select(['*', 'order_ledger.id as id'])
   )
   .then(orders => {

@@ -1,20 +1,12 @@
 const dataModel = require('../models/shop')
 
-//////////////////////////////////////////////////////////////////////////////
 // CRUD for users by StoreId
-//////////////////////////////////////////////////////////////////////////////
 
 const getAllStoreOrders = (req, res, next) => {
-  console.log(req.claim.id)
   dataModel.getAllStoreOrders(req.claim.id)
   .then((data) => res.status(200).json({ data }))
   .catch(next)
 }
-
-
-
-
-
 
 const createStoreOrders = (req, res, next) => {
   dataModel.authGetOne(req.params.storeId)
@@ -29,10 +21,7 @@ const createStoreOrders = (req, res, next) => {
 }
 
 
-
 const modifyStoreOrders = (req, res, next) => {
-  console.log(req.claim.id)
-  // add verification here
   if(!req.params.orderId) return next({ status: 400, message: 'Error: Specify order id'})
   const {is_fulfilled, is_canceled} = req.body
   dataModel.modifyStoreOrders(req.params.orderId, is_fulfilled, is_canceled)

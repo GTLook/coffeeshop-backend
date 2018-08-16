@@ -2,9 +2,7 @@ const db = require('../../db/knex')
 const shortid = require('shortid')
 
 
-//////////////////////////////////////////////////////////////////////////////
 // Auth check for user
-//////////////////////////////////////////////////////////////////////////////
 
 const authGetOne = (userId) => {
   return (
@@ -14,9 +12,7 @@ const authGetOne = (userId) => {
   )
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // Basic CRUD Methods
-//////////////////////////////////////////////////////////////////////////////
 
 const getAllShops = () => {
   return (
@@ -68,8 +64,6 @@ const getAllOptions = () => {
   })
 }
 
-
-
 const getAllUserOrders = (userId) => {
   let detailedOrders = []
   return (
@@ -90,9 +84,6 @@ const getAllUserOrders = (userId) => {
     return detailedOrders
   })
 }
-
-// '{"shopId":"1","pickupTime":"2018-05-05 06:00:00","orderItems":[{"productWithOptionsId":"2","sizeId":"3","milkId":"2","extraId":"1","extraShots":2},{"productWithOptionsId":"1","sizeId":"1","milkId":"1","extraId":"1","extraShots":0}]}'
-
 
 const createUserOrders = (userId, payload) => {
   const order_shortid = shortid.generate()
